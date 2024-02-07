@@ -44,7 +44,7 @@ pipeline{
                }
             }
         }
-// Jfrog intergation
+
          stage('Jfrog Intergation'){
          when { expression {  params.action == 'create' } }
             steps{
