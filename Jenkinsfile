@@ -73,6 +73,19 @@ pipeline{
                }
             }
         }
+    // adding Jfrog intergation
+        
+        stage('Jfrog Itegration : jfrog'){
+             when { expression {  params.action == 'create' } }
+                steps{
+                   script{
+                   
+                       jfrogintergation()
+                   }
+                }
+            }
+
+        
         stage('Docker Image Build'){
          when { expression {  params.action == 'create' } }
             steps{
