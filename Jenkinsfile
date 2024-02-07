@@ -44,6 +44,18 @@ pipeline{
                }
             }
         }
+// Jfrog intergation
+         stage('Jfrog Intergation'){
+         when { expression {  params.action == 'create' } }
+            steps{
+               script{
+                   
+                   jfrogintergation()
+               }
+            }
+        }
+        
+        
         stage('Static code analysis: Sonarqube'){
          when { expression {  params.action == 'create' } }
             steps{
