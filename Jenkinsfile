@@ -51,7 +51,22 @@ pipeline{
             steps{
                script{
                    
-                   jfrogintergation()
+                   echo "Attempting to push artifact to Jfrog"
+			withCredentials([usernamePassword(
+            credentialsId: "artifactory",
+            usernameVariable: "USER",
+            passwordVariable: "PASS"
+    )]) {
+	//use the artifactory_user and Artifactory_password variable
+        echo "username: $USER"
+        echo "password: $PASS"
+      
+        def curlCommand = "curl -u '${USER}:${PASS}' -T target/*.jar ${params.artifactoryURL}/artifactory/example-repo-local/"
+        echo "Executing curl command : $curlCommand"
+        sh curlCommand
+    }
+      
+
                }
             }
         }
