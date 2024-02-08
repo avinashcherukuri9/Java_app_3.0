@@ -45,32 +45,7 @@ pipeline{
                }
             }
         }
-
-         stage('Jfrog Intergation'){
-         when { expression {  params.action == 'create' } }
-            steps{
-               script{
-                   // connect to Jfrog artifactory
-		       def server = Artifactory.server 'artifactory'
-		       //define the upload specification
-		       def uploadSpec = """{
-		       "files":[
-	 			{
-     				"pattern": "target/*.jar"
-	 			"target": "example-repo-local/"
-				}
-		       	    ]
-		       }"""
-                //upload artifacts to Jfrog
-		       server.upload(uploadSpec)
-      
-
-               }
-            }
-        }
-        
-        
-        stage('Static code analysis: Sonarqube'){
+	stage('Static code analysis: Sonarqube'){
          when { expression {  params.action == 'create' } }
             steps{
                script{
@@ -99,6 +74,25 @@ pipeline{
                }
             }
         }
+	stage('Jfrog Phase'){
+	when{ expression {  params.action == 'create' } }
+		steps{
+			script{
+				script {
+    			def server = Artifactory.server 'Artifactory'
+			def uploadSpec = '''{
+       				 "files": [
+	    			{
+       				 "pattern": "target/*.jar",
+        			"target": "example-repo-local/"
+       				 }
+	    			]
+   				 }'''
+   			 server.upload(uploadSpec) 
+			}
+			}
+		}
+	}
         stage('Docker Image Build'){
          when { expression {  params.action == 'create' } }
             steps{
